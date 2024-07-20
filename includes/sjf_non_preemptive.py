@@ -1,0 +1,66 @@
+
+from utils.table import print_tabela_sjf
+
+STATS = ('criado', 'pronto', 'executando', 'bloqueado', 'encerrado')
+
+def sjf_non_preemptive(processes):
+    # Manter uma cópia dos processos originais para exibição dos resultados
+    processos_originais = processes.copy()
+
+    # Ordenar os processos pelo tempo de chegada e tempo de rajada
+    processes.sort(key=lambda x: (x["arrival_time"], x["burst_times"][0]))
+
+    tempo_atual = 0
+    tempo_espera_total = 0
+    tabela_dados = []
+    
+    while processes:
+        
+        # Filtrar processos que chegaram até o tempo atual
+        processos_disponiveis = [
+            p for p in processes if p["arrival_time"] <= tempo_atual
+        ]
+        
+        # Selecionar o processo com menor tempo de execução
+        if processos_disponiveis:
+            processo_atual = min(
+                processos_disponiveis, key=lambda x: x["burst_times"][0]
+            )
+            processes.remove(processo_atual)
+
+            processo_atual["tempo_inicio"] = tempo_atual #Define o tempo de início do processo atual.
+            processo_atual["tempo_termino"] = (
+                tempo_atual + processo_atual["burst_times"][0] #Calcula o tempo de término do processo atual.
+            )
+            processo_atual["tempo_espera"] = (
+                processo_atual["tempo_inicio"] - processo_atual["arrival_time"] #Calcula o tempo de espera do processo atual.
+            )
+            
+            # Calcular tempos de início, término e espera
+            tempo_atual = processo_atual["tempo_termino"]
+            tempo_espera_total += processo_atual["tempo_espera"]
+        else:
+            tempo_atual += 1
+
+    # Exibir resultados
+    for p in processos_originais:
+        tabela_dados.append({
+            'pid':p['pid'],
+            'tempo_inicio': p.get('tempo_inicio', 'N/A'),
+            'tempo_termino': p.get('tempo_termino', 'N/A'),
+            'tempo_espera': p.get('tempo_espera', 'N/A')
+        })
+
+    print_tabela_sjf(tabela_dados)
+
+    # Calcular tempo de espera médio
+    if processos_originais:  # Verifica se há processos para evitar ZeroDivisionError
+        tempo_espera_medio = tempo_espera_total / len(processos_originais)
+        print(f"Tempo de Espera Médio: {tempo_espera_medio:.2f} unidades de tempo")
+    else:
+        print("Não há processos para calcular o tempo de espera médio.")
+
+        # 0     7
+        # 2     4
+        # 1     2
+        # 5     4
