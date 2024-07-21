@@ -19,6 +19,6 @@ def fcfs(processes):
         })
         wait_time += burst_time  # `wait_time` acumula o valor de `burst_time` e soma com valor total
     
-    avg_wait_time = avg_wt_add / (len(processes) - 1)  # Cálculo do tempo de espera médio, excluindo o primeiro processo
+    avg_wait_time = avg_wt_add / (len(processes))  # Cálculo do tempo de espera médio
     print('\n')
     print_table_fcfs(tabela_dados, avg_wait_time)
