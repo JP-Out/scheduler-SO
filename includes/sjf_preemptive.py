@@ -1,5 +1,5 @@
 import heapq
-from utils.visualizer import print_table_sjf
+from utils.visualizer import print_table_sjf, print_execution_order
 
 def sjf_preemptive(processes):
     # Manter uma cópia dos processos originais para exibição dos resultados
@@ -9,6 +9,7 @@ def sjf_preemptive(processes):
     processes.sort(key=lambda x: x["arrival_time"])
 
     # Incializando as variaveis
+    ordem_execucao = []
     tempo_atual = 0 
     tempo_espera_total = 0 
     tabela_dados = [] 
@@ -30,6 +31,8 @@ def sjf_preemptive(processes):
             _,current_pid = heapq.heappop(min_heap) # Obtém o processo com o menor tempo de rajada restante
             if current_pid not in start_times: # Primeira vez que o processo roda
                 start_times[current_pid] = tempo_atual # Registra o tempo de início do processo
+                
+            ordem_execucao.append(current_pid)
             
             tempo_atual += 1 # Incrementa o tempo atual (simula a execução do processo por uma unidade de tempo)
             burst_remaining[current_pid] -= 1 # Decrementa o tempo de rajada restante do processo
@@ -62,3 +65,4 @@ def sjf_preemptive(processes):
     
     print('\n')
     print_table_sjf(tabela_dados, tempo_espera_medio)
+    print_execution_order(ordem_execucao)

@@ -1,8 +1,9 @@
-from utils.visualizer import print_table_fcfs
+from utils.visualizer import print_table_fcfs, print_execution_order
 
 def fcfs(processes):
     avg_wt_add = 0
     tabela_dados = []
+    ordem_execucao = []
 
     
     for index, process in enumerate(processes):
@@ -17,8 +18,10 @@ def fcfs(processes):
             'tempo_espera': wait_time,
             'burst_time': burst_time
         })
+        ordem_execucao.append(process['pid'])
         wait_time += burst_time  # `wait_time` acumula o valor de `burst_time` e soma com valor total
     
-    avg_wait_time = avg_wt_add / (len(processes))  # Cálculo do tempo de espera médio
+    avg_wait_time = avg_wt_add / (len(processes))  # Cálculo do tempo de espera médio, excluindo o primeiro processo
     print('\n')
     print_table_fcfs(tabela_dados, avg_wait_time)
+    print_execution_order(ordem_execucao)

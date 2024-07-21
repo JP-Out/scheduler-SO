@@ -1,7 +1,4 @@
-from utils.visualizer import print_table_sjf
-
-STATS = ("criado", "pronto", "executando", "bloqueado", "encerrado")
-
+from utils.visualizer import print_table_sjf, print_execution_order
 
 def sjf_non_preemptive(processes):
     # Manter uma cópia dos processos originais para exibição dos resultados
@@ -13,6 +10,7 @@ def sjf_non_preemptive(processes):
     tempo_atual = 0
     tempo_espera_total = 0
     tabela_dados = []
+    ordem_execucao = []
 
     while processes:
 
@@ -20,7 +18,8 @@ def sjf_non_preemptive(processes):
         processos_disponiveis = [
             p for p in processes if p["arrival_time"] <= tempo_atual
         ]
-
+        
+        
         # Selecionar o processo com menor tempo de execução
         if processos_disponiveis:
             processo_atual = min(
@@ -37,6 +36,8 @@ def sjf_non_preemptive(processes):
             processo_atual["tempo_espera"] = (
                 processo_atual["tempo_inicio"] - processo_atual["arrival_time"]  # Calcula o tempo de espera do processo atual.
             )
+            
+            ordem_execucao.append(processo_atual["pid"])
 
             # Calcular tempos de início, término e espera
             tempo_atual = processo_atual["tempo_termino"]
@@ -60,3 +61,4 @@ def sjf_non_preemptive(processes):
     
     print('\n')
     print_table_sjf(tabela_dados, tempo_espera_medio)
+    print_execution_order(ordem_execucao)

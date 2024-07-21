@@ -1,17 +1,6 @@
 from collections import deque
 from utils.visualizer import print_table_round_robin, print_execution_order
 
-# Função para imprimir a tabela de resultados para Round Robin
-def print_tabela_rr(tabela_dados, ordem_execucao):
-    print("\nTabela de Resultados Round Robin:")
-    print(f"{'PID':<10}{'Tempo Início':<15}{'Tempo Término':<15}{'Tempo Espera':<15}")
-    for dado in tabela_dados:
-        print(f"{dado['pid']:<10}{dado['tempo_inicio']:<15}{dado['tempo_termino']:<15}{dado['tempo_espera']:<15}")
-    
-    print("\nOrdem de Execução dos Processos:")
-    print(' -> '.join(ordem_execucao))
-    print()
-
 def round_robin(processes, quantum):
     # Manter uma cópia dos processos originais para exibição dos resultados
     processos_originais = processes.copy()
