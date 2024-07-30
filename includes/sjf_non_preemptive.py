@@ -1,12 +1,13 @@
 from utils.visualizer import print_table_sjf, print_execution_order
 
 def sjf_non_preemptive(processes):
-    # Manter uma cópia dos processos originais para exibição dos resultados
+    # Cópia para exibição dos resultados
     processos_originais = processes.copy()
 
     # Ordenar os processos pelo tempo de chegada e tempo de rajada
     processes.sort(key=lambda x: (x["arrival_time"], x["burst_times"][0]))
 
+    # Inicialização
     tempo_atual = 0
     tempo_espera_total = 0
     tabela_dados = []
@@ -39,7 +40,7 @@ def sjf_non_preemptive(processes):
             
             ordem_execucao.append(processo_atual["pid"])
 
-            # Calcular tempos de início, término e espera
+            # Atualiza `tempo_atual`, incrementa `tempo_espera_total`
             tempo_atual = processo_atual["tempo_termino"]
             tempo_espera_total += processo_atual["tempo_espera"]
         else:
@@ -47,14 +48,14 @@ def sjf_non_preemptive(processes):
 
     # Exibir resultados
     for p in processos_originais:
-        tabela_dados.append({
+        tabela_dados.append({ # Cria a tabela com os dados
                 "pid": p["pid"],
                 "tempo_inicio": p.get("tempo_inicio", "N/A"),
                 "tempo_termino": p.get("tempo_termino", "N/A"),
                 "tempo_espera": p.get("tempo_espera", "N/A"),
         })
 
-    if processos_originais:  # Evitar ZeroDivisionError
+    if processos_originais:  # Evita ZeroDivisionError
         tempo_espera_medio = tempo_espera_total / len(processos_originais)
     else:
         print("Não há processos para calcular o tempo de espera médio.")

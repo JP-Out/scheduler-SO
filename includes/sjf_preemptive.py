@@ -2,7 +2,7 @@ import heapq
 from utils.visualizer import print_table_sjf, print_execution_order
 
 def sjf_preemptive(processes):
-    # Manter uma cópia dos processos originais para exibição dos resultados
+    # Cópia para exibição dos resultados
     processos_originais = processes.copy()
 
     # Ordenar os processos pelo tempo de chegada
