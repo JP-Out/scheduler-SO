@@ -1,22 +1,74 @@
 from termcolor import colored
+FCFS_MAX_WIDTH = 86
+SJF_MAX_WIDTH = 64
+RR_MAX_WIDTH = 64
 
-def print_table_fcfs(dados, avg):
-    average = f"Tempo Médio: {avg:.2f} u.t"
-    half_length_string = ((43 - len(average))//2)
+def format_column(value, width):
+    """Formata o valor com a largura especificada."""
+    str_value = str(value)
+    if len(str_value) > width:
+        return f" {str_value[:width - 3]}... "
+    return f" {str(value):<{width}} "
+
+def print_table_fcfs(dados, avg, total_exec_time=300000000000):
+    average_str = f"Tempo Médio: {avg:.2f} u.t"  # Armazena o tempo médio em uma string
+    total_time_str = f"Tempo Total de Execução: {total_exec_time:.2f} u.t"
+
+    # Calcula os espaços de preenchimento à esquerda e à direita
+    avg_padding = (FCFS_MAX_WIDTH - len(average_str)) // 2
+    total_time_padding = (FCFS_MAX_WIDTH - len(total_time_str)) // 2
+
+    # Certifica-se de que os preenchimentos não sejam negativos
+    avg_padding_left = max(avg_padding, 0)
+    avg_padding_right = FCFS_MAX_WIDTH - len(average_str) - avg_padding_left
+    total_time_padding_left = max(total_time_padding, 0)
+    total_time_padding_right = FCFS_MAX_WIDTH - len(total_time_str) - total_time_padding_left
+
+    # Definindo os comprimentos das colunas
+    col_widths = {
+        'PID': 6,
+        'Wait Time': 10,
+        'Burst Time': 11,
+        'Execution Time': 15,
+        'Turnaround Time': 15,
+        'Finish Time': 12
+    }
     
-    print(colored("╒" + "═" * 7 + "╤" + "═" * 17 + "╤" + "═" * 15 + "╕", 'blue'))
-    print(colored("│", 'blue') + colored(f" {'PID':<5} ", 'yellow') + colored("│", 'blue') + colored(f" {'Tempo de Espera':<15} ", 'yellow') + colored("│", 'blue') + colored(f" {'Burst Time':<13} ", 'yellow') + colored("│", 'blue'))
-    print(colored("╞" + "═" * 7 + "╪" + "═" * 17 + "╪" + "═" * 15 + "╡", 'blue'))
+    # Impressão do cabeçalho da tabela
+    print(colored("╒" + "═" * 8 + "╤" + "═" * 12 + "╤" + "═" * 13 + "╤" + "═" * 17 + "╤" + "═" * 17 + "╤" + "═" * 14 + "╕", 'blue'))
+    print(colored("│", 'blue') + colored(format_column('PID', col_widths['PID']), 'yellow') + colored("│", 'blue') +
+          colored(format_column('Wait Time', col_widths['Wait Time']), 'yellow') + colored("│", 'blue') +
+          colored(format_column('Burst Time', col_widths['Burst Time']), 'yellow') + colored("│", 'blue') +
+          colored(format_column('Execution Time', col_widths['Execution Time']), 'yellow') + colored("│", 'blue') +
+          colored(format_column('Turnaround Time', col_widths['Turnaround Time']), 'yellow') + colored("│", 'blue') +
+          colored(format_column('Finish Time', col_widths['Finish Time']), 'yellow') + colored("│", 'blue'))
+    print(colored("╞" + "═" * 8 + "╪" + "═" * 12 + "╪" + "═" * 13 + "╪" + "═" * 17 + "╪" + "═" * 17 + "╪" + "═" * 14 + "╡", 'blue'))
     
+    # Impressão dos resultados na tabela
     for item in dados:
-        print(colored("│", 'blue') + colored(f" {item['pid']:<5} ", 'green') + colored("│", 'blue') + colored(f" {item['tempo_espera']:<15} ", 'green') + colored("│", 'blue') + colored(f" {item['burst_time']:<13} ", 'green') + colored("│", 'blue'))
+        item['turnaround_time'] = item['tempo_espera'] + item['burst_time']  # Calcula Turnaround Time
+        item['finish_time'] = 'Null' 
+        item['tempo_execucao'] = 'Null'
+        print(colored("│", 'blue') + colored(format_column(item['pid'], col_widths['PID']), 'green') +
+              colored("│", 'blue') + colored(format_column(item['tempo_espera'], col_widths['Wait Time']), 'green') +
+              colored("│", 'blue') + colored(format_column(item['burst_time'], col_widths['Burst Time']), 'green') +
+              colored("│", 'blue') + colored(format_column(item['tempo_execucao'], col_widths['Execution Time']), 'green') +
+              colored("│", 'blue') + colored(format_column(item['turnaround_time'], col_widths['Turnaround Time']), 'green') +
+              colored("│", 'blue') + colored(format_column(item['finish_time'], col_widths['Finish Time']), 'green') +
+              colored("│", 'blue'))   
     
-    print(colored("╘" + "═" * 7 + "╧" + "═" * 17 + "╧" + "═" * 15 + "╛", 'blue'))
-    print(colored(" " * half_length_string + f"{average}", 'magenta'))
+    # Impressão do Tempo Total de Execução
+    print(colored("╞" + "═" * 8 + "╧" + "═" * 12 + "╧" + "═" * 13 + "╧" + "═" * 17 + "╧" + "═" * 17 + "╧" + "═" * 14 + "╡", 'blue'))
+    print(colored("│" + " " * total_time_padding_left + f"{total_time_str}" + " " * total_time_padding_right + "│", 'cyan'))
+    print(colored("╞" + "═" * (FCFS_MAX_WIDTH) + "╡", 'blue'))
+
+    # Impressão do Tempo Médio
+    print(colored("│" + " " * avg_padding_left + f"{average_str}" + " " * avg_padding_right + "│", 'cyan'))
+    print(colored("╘" + "═" * (FCFS_MAX_WIDTH) + "╛", 'blue'))
 
 def print_table_sjf(dados, avg):
     average = f"Tempo Médio: {avg:.2f} u.t"
-    half_length_string = ((64 - len(average))//2)
+    half_length_string = ((SJF_MAX_WIDTH - len(average))//2)
     
     print(colored("╒" + "═" * 7 + "╤" + "═" * 17 + "╤" + "═" * 18 + "╤" + "═" * 17 + "╕", 'blue'))
     print(colored("│", 'blue') + colored(f" {'PID':<5} ", 'yellow') + colored("│", 'blue') + colored(f" {'Tempo de Início':<15} ", 'yellow') + colored("│", 'blue') + colored(f" {'Tempo de Término':<15} ", 'yellow') + colored("│", 'blue') + colored(f" {'Tempo de Espera':<15} ", 'yellow') + colored("│", 'blue'))
@@ -30,7 +82,7 @@ def print_table_sjf(dados, avg):
 
 def print_table_round_robin(dados, avg):
     average = f"Tempo Médio: {avg:.2f} u.t"
-    half_length_string = ((64 - len(average))//2)
+    half_length_string = ((RR_MAX_WIDTH - len(average))//2)
     
     print(colored("╒" + "═" * 7 + "╤" + "═" * 17 + "╤" + "═" * 18 + "╤" + "═" * 17 + "╕", 'blue'))
     print(colored("│", 'blue') + colored(f" {'PID':<5} ", 'yellow') + colored("│", 'blue') + colored(f" {'Tempo de Início':<15} ", 'yellow') + colored("│", 'blue') + colored(f" {'Tempo de Término':<15} ", 'yellow') + colored("│", 'blue') + colored(f" {'Tempo de Espera':<15} ", 'yellow') + colored("│", 'blue'))
