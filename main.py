@@ -78,7 +78,7 @@ def main():
     processes = create_process(algorithm)
     
     if algorithm == 'fcfs':
-        context_switch_time = int(input(colored("\nInforme o ", 'yellow') + colored("TEMPO DE TROCA DE CONTEXTO", 'blue') + colored(": ", 'yellow')))
+        context_switch_time = int(input(colored("\nInforme o ", 'yellow') + colored("TEMPO DE TROCA DE CONTEXTO", 'blue') + colored(": ", 'yellow'))); print()
         fcfs(processes, context_switch_time)
     elif algorithm == 'sjf':
         sjf_non_preemptive(processes)

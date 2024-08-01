@@ -1,5 +1,5 @@
 from termcolor import colored
-FCFS_MAX_WIDTH = 86
+FCFS_MAX_WIDTH = 68
 SJF_MAX_WIDTH = 64
 RR_MAX_WIDTH = 64
 
@@ -10,7 +10,7 @@ def format_column(value, width):
         return f" {str_value[:width - 3]}... "
     return f" {str(value):<{width}} "
 
-def print_table_fcfs(dados, avg, total_exec_time=300000000000):
+def print_table_fcfs(dados, avg, total_exec_time):
     average_str = f"Tempo Médio: {avg:.2f} u.t"  # Armazena o tempo médio em uma string
     total_time_str = f"Tempo Total de Execução: {total_exec_time:.2f} u.t"
 
@@ -29,41 +29,36 @@ def print_table_fcfs(dados, avg, total_exec_time=300000000000):
         'PID': 6,
         'Wait Time': 10,
         'Burst Time': 11,
-        'Execution Time': 15,
         'Turnaround Time': 15,
         'Finish Time': 12
     }
     
     # Impressão do cabeçalho da tabela
-    print(colored("╒" + "═" * 8 + "╤" + "═" * 12 + "╤" + "═" * 13 + "╤" + "═" * 17 + "╤" + "═" * 17 + "╤" + "═" * 14 + "╕", 'blue'))
+    print(colored("╒" + "═" * 8 + "╤" + "═" * 12 + "╤" + "═" * 13 + "╤" + "═" * 17 + "╤" + "═" * 14 + "╕", 'blue'))
     print(colored("│", 'blue') + colored(format_column('PID', col_widths['PID']), 'yellow') + colored("│", 'blue') +
           colored(format_column('Wait Time', col_widths['Wait Time']), 'yellow') + colored("│", 'blue') +
           colored(format_column('Burst Time', col_widths['Burst Time']), 'yellow') + colored("│", 'blue') +
-          colored(format_column('Execution Time', col_widths['Execution Time']), 'yellow') + colored("│", 'blue') +
           colored(format_column('Turnaround Time', col_widths['Turnaround Time']), 'yellow') + colored("│", 'blue') +
           colored(format_column('Finish Time', col_widths['Finish Time']), 'yellow') + colored("│", 'blue'))
-    print(colored("╞" + "═" * 8 + "╪" + "═" * 12 + "╪" + "═" * 13 + "╪" + "═" * 17 + "╪" + "═" * 17 + "╪" + "═" * 14 + "╡", 'blue'))
+    print(colored("╞" + "═" * 8 + "╪" + "═" * 12 + "╪" + "═" * 13 + "╪" + "═" * 17 + "╪" + "═" * 14 + "╡", 'blue'))
     
     # Impressão dos resultados na tabela
     for item in dados:
-        item['turnaround_time'] = item['tempo_espera'] + item['burst_time']  # Calcula Turnaround Time
-        item['finish_time'] = 'Null' 
         item['tempo_execucao'] = 'Null'
         print(colored("│", 'blue') + colored(format_column(item['pid'], col_widths['PID']), 'green') +
               colored("│", 'blue') + colored(format_column(item['tempo_espera'], col_widths['Wait Time']), 'green') +
               colored("│", 'blue') + colored(format_column(item['burst_time'], col_widths['Burst Time']), 'green') +
-              colored("│", 'blue') + colored(format_column(item['tempo_execucao'], col_widths['Execution Time']), 'green') +
               colored("│", 'blue') + colored(format_column(item['turnaround_time'], col_widths['Turnaround Time']), 'green') +
               colored("│", 'blue') + colored(format_column(item['finish_time'], col_widths['Finish Time']), 'green') +
               colored("│", 'blue'))   
     
     # Impressão do Tempo Total de Execução
-    print(colored("╞" + "═" * 8 + "╧" + "═" * 12 + "╧" + "═" * 13 + "╧" + "═" * 17 + "╧" + "═" * 17 + "╧" + "═" * 14 + "╡", 'blue'))
-    print(colored("│" + " " * total_time_padding_left + f"{total_time_str}" + " " * total_time_padding_right + "│", 'cyan'))
+    print(colored("╞" + "═" * 8 + "╧" + "═" * 12 + "╧" + "═" * 13 + "╧" + "═" * 17 + "╧" + "═" * 14 + "╡", 'blue'))
+    print(colored(colored("│", 'blue') + colored(" " * total_time_padding_left + f"{total_time_str}" + " " * total_time_padding_right, 'cyan') + colored("│", 'blue'), 'cyan'))
     print(colored("╞" + "═" * (FCFS_MAX_WIDTH) + "╡", 'blue'))
 
     # Impressão do Tempo Médio
-    print(colored("│" + " " * avg_padding_left + f"{average_str}" + " " * avg_padding_right + "│", 'cyan'))
+    print(colored("│", 'blue') + colored(" " * avg_padding_left + f"{average_str}" + " " * avg_padding_right, 'cyan') + colored("│", 'blue'))
     print(colored("╘" + "═" * (FCFS_MAX_WIDTH) + "╛", 'blue'))
 
 def print_table_sjf(dados, avg):
