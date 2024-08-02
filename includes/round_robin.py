@@ -1,5 +1,5 @@
 from collections import deque
-from utils.visualizer import print_table_round_robin, print_execution_order
+from utils.visualizer import print_table_rr, print_execution_order
 
 def round_robin(processes, quantum):
     # Manter uma cópia dos processos originais para exibição dos resultados
@@ -62,19 +62,27 @@ def round_robin(processes, quantum):
     
     # Exibir resultados
     for p in processos_originais:
+        pid = p['pid']
+        burst_time = p['burst_times'][0]
+        turnaround_time = end_times.get(pid, 'N/A') - p['arrival_time']
         tabela_dados.append({
-            'pid': p['pid'],
-            'tempo_inicio': start_times.get(p['pid'], 'N/A'),
-            'tempo_termino': end_times.get(p['pid'], 'N/A'),
-            'tempo_espera': wait_times.get(p['pid'], 'N/A')
+            'pid': pid,
+            'burst_time': burst_time,
+            'wait_time': wait_times.get(pid, 'N/A'),
+            'turnaround_time': turnaround_time,
+            'finish_time': end_times.get(pid, 'N/A')
         })
 
     # Calcular tempo de espera médio
     if processos_originais:  # Verifica se há processos para evitar ZeroDivisionError
         tempo_espera_medio = sum(wait_times.values()) / len(processos_originais)
     else:
-        print("Não há processos para calcular o tempo de espera médio.")
-    print('\n')
-    print_table_round_robin(tabela_dados, tempo_espera_medio)
+        tempo_espera_medio = 0  # Para evitar problemas de divisão por zero
+
+    # Tempo total de execução
+    tempo_total_execucao = max(end_times.values(), default=0)
     
+    # Chama a função para imprimir a tabela com o tempo total de execução
+    print()
+    print_table_rr(tabela_dados, tempo_espera_medio, tempo_total_execucao)
     print_execution_order(ordem_execucao)

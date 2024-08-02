@@ -23,7 +23,7 @@ def fcfs(processes, context_switch_time):
         
         tabela_dados.append({
             'pid': process['pid'],
-            'tempo_espera': wait_time,
+            'wait_time': wait_time,
             'burst_time': burst_time,
             'turnaround_time': turnaround_time,
             'finish_time': finish_time
