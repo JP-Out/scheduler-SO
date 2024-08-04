@@ -5,7 +5,7 @@
 
 O simulador de gerenciador de processos foi implementado para suportar quatro políticas de escalonamento: FCFS, SJF Não-preemptivo, SJF Preemptivo e Round Robin. O objetivo do simulador é permitir a entrada de processos, definir a política de escalonamento, e calcular a ordem de execução dos processos, o tempo de execução e o tempo médio de espera, conforme exigido.
 
-----------
+
 
 ## Estrutura do Código
 
@@ -36,13 +36,13 @@ O simulador de gerenciador de processos foi implementado para suportar quatro po
 -   **Funções `print_table_fcfs`, `print_table_sjf` e `print_table_round_robin`**: Estas funções são responsáveis por formatar e imprimir os resultados das execuções dos processos, incluindo PIDs, tempos de chegada, tempos de rajada, tempos de espera, tempos de resposta e tempo de término, além do tempo de espera médio e tempo de execução total, conforme a política de escalonamento aplicada.
 -   **Função `print_execution_order`**: Formata e imprime a ordem de execução dos processos, utilizando cores para realçar diferentes partes da tabela.
 
-----------
+
 
 ## Funcionamento
 
 O usuário interage com o programa através do terminal, fornecendo as informações dos processos e a política de escalonamento desejada. O programa então processa essas informações e exibe os resultados de acordo com a política selecionada.
 
-----------
+
 
 ## Importações Utilizadas
 
@@ -54,7 +54,7 @@ O código utiliza as seguintes importações para garantir a funcionalidade e a 
 -   **`from termcolor import colored`**: Utilizado para adicionar cores ao texto impresso no terminal, melhorando a legibilidade e a apresentação dos dados.
 -   **`from utils.visualizer`**: Importa funções do módulo **`visualizer.py`** para formatação e exibição dos resultados dos diferentes algoritmos de escalonamento.
 
-----------
+
 
 ## Estrutura do Código
 
