@@ -1,6 +1,6 @@
 from utils.visualizer import print_table_sjf, print_execution_order
 
-def sjf_non_preemptive(processes):
+def sjf_non_preemptive(processes, context_switch_time):
     # Cópia para exibição dos resultados
     original_processes = processes.copy()
 
@@ -21,6 +21,10 @@ def sjf_non_preemptive(processes):
         if available_processes:
             current_process = min(available_processes, key=lambda x: x["burst_times"][0])
             processes.remove(current_process)
+
+            # Adiciona o tempo de troca de contexto, se não for o primeiro processo
+            if execution_order:
+                current_time += context_switch_time
 
             current_process["start_time"] = current_time  # Define o tempo de início do processo atual
             current_process["finish_time"] = current_time + current_process["burst_times"][0]  # Calcula o tempo de término do processo atual

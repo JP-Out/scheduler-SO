@@ -13,7 +13,7 @@ def fcfs(processes, context_switch_time):
             start_time = process['arrival_time']  
         else:
             wait_time = current_time - process['arrival_time']
-            wait_time = max(wait_time, 0)  # Garantir que o tempo de espera não seja negativo
+            wait_time = max(wait_time, 0)
         
         avg_wt_add += wait_time
         

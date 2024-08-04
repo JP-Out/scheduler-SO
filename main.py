@@ -16,7 +16,7 @@ def create_process(algorithm):
     """
     burst_times_all = []  # Lista com todos os tempos de rajada
     arrival_times_all = []  # Lista com todos os tempos de chegada
-    printed_once = False  # Variável para garantir quebra de linha uma única vez
+    printed_once = False  # Variável para uma única quebra de linha
     
     pids = list(map(str, input(colored("\nInforme os PIDs:\neg.: 000 111 222\n", 'cyan')).split()))  # Adiciona todos os PIDs na lista `pids`
     
@@ -81,12 +81,15 @@ def main():
         context_switch_time = int(input(colored("\nInforme o ", 'yellow') + colored("TEMPO DE TROCA DE CONTEXTO", 'blue') + colored(": ", 'yellow'))); print()
         fcfs(processes, context_switch_time)
     elif algorithm == 'sjf':
-        sjf_non_preemptive(processes)
+        context_switch_time = int(input(colored("\nInforme o ", 'yellow') + colored("TEMPO DE TROCA DE CONTEXTO", 'blue') + colored(": ", 'yellow'))); print()
+        sjf_non_preemptive(processes, context_switch_time)
     elif algorithm == 'sjf-preemptive':
-        sjf_preemptive(processes)
+        context_switch_time = int(input(colored("\nInforme o ", 'yellow') + colored("TEMPO DE TROCA DE CONTEXTO", 'blue') + colored(": ", 'yellow'))); print()
+        sjf_preemptive(processes, context_switch_time)
     elif algorithm == 'round_robin':
         quantum = int(input(colored("\nInforme o ", 'yellow') + colored("QUANTUM", 'blue') + colored(" do ", 'yellow') + colored("Round-Robin", 'blue') + colored(": ", 'yellow')))
-        round_robin(processes, quantum)
+        context_switch_time = int(input(colored("\nInforme o ", 'yellow') + colored("TEMPO DE TROCA DE CONTEXTO", 'blue') + colored(": ", 'yellow'))); print()
+        round_robin(processes, quantum, context_switch_time)
 
 if __name__ == "__main__":
     main()

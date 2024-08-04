@@ -1,8 +1,8 @@
 from collections import deque
 from utils.visualizer import print_table_rr, print_execution_order
 
-def round_robin(processes, quantum):
-    # Manter uma cópia dos processos originais para exibição dos resultados
+def round_robin(processes, quantum, context_switch_time):
+    # Cópia para exibição dos resultados
     processos_originais = processes.copy()
     
     # Inicializando variáveis
@@ -24,6 +24,8 @@ def round_robin(processes, quantum):
         fila.append(processes[process_index])
         process_index += 1
 
+    last_pid = None  # Para acompanhar o último processo executado
+
     while fila or process_index < n:
         if fila:
             current_process = fila.popleft()  # Obtém o próximo processo da fila
@@ -35,6 +37,12 @@ def round_robin(processes, quantum):
             # Se o processo está começando pela primeira vez
             if current_pid not in start_times:
                 start_times[current_pid] = tempo_atual  # Registra o tempo de início do processo
+            
+            # Se houve troca de processo, adiciona o tempo de troca de contexto
+            if last_pid is not None and last_pid != current_pid:
+                tempo_atual += context_switch_time
+
+            last_pid = current_pid  # Atualiza o último processo executado
             
             # Executa o processo pelo tempo do quantum ou até ser completado
             execute_time = min(quantum, burst_remaining[current_pid])
@@ -77,7 +85,7 @@ def round_robin(processes, quantum):
     if processos_originais:  # Verifica se há processos para evitar ZeroDivisionError
         tempo_espera_medio = sum(wait_times.values()) / len(processos_originais)
     else:
-        tempo_espera_medio = 0  # Para evitar problemas de divisão por zero
+        tempo_espera_medio = 0
 
     # Tempo total de execução
     tempo_total_execucao = max(end_times.values(), default=0)

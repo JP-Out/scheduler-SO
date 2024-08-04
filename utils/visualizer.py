@@ -47,8 +47,8 @@ def print_table_fcfs(dados, avg, total_exec_time):
     for item in dados:
         item['tempo_execucao'] = 'Null'
         print(colored("│", 'blue') + colored(format_column(item['pid'], col_widths['PID']), 'green') +
-              colored("│", 'blue') + colored(format_column(item['wait_time'], col_widths['Wait Time']), 'green') +
               colored("│", 'blue') + colored(format_column(item['burst_time'], col_widths['Burst Time']), 'green') +
+              colored("│", 'blue') + colored(format_column(item['wait_time'], col_widths['Wait Time']), 'green') +
               colored("│", 'blue') + colored(format_column(item['turnaround_time'], col_widths['Turnaround Time']), 'green') +
               colored("│", 'blue') + colored(format_column(item['finish_time'], col_widths['Finish Time']), 'green') +
               colored("│", 'blue'))   
@@ -176,7 +176,7 @@ def print_execution_order(order):
 
     # Verificar se a linha é longa demais
     if len(formatted_order) > max_line_length:
-        # Dividir a string em múltiplas linhas
+        # Divide a string em múltiplas linhas
         lines = [formatted_order[i:i + max_line_length] for i in range(0, len(formatted_order), max_line_length)]
         
         # Impressão do cabeçalho
@@ -204,4 +204,3 @@ def print_execution_order(order):
 
         # Impressão da borda inferior
         print(bottom_border); print()
-
